@@ -5,6 +5,7 @@ services:
     image: hashicorp/terraform:0.12.18
     volumes:
       - ./terraform:/terraform
+    working_dir: /terraform
 
   tflint:
     <<: *terraform
