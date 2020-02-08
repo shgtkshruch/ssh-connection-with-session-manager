@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  terraform: &terraform
+    image: hashicorp/terraform:0.12.18
+    volumes:
+      - ./terraform:/terraform
+
+  tflint:
+    <<: *terraform
+    image: wata727/tflint
