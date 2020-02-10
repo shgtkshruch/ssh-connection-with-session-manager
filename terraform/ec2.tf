@@ -3,6 +3,7 @@ resource "aws_instance" "web" {
   instance_type        = "t2.micro"
   subnet_id            = aws_subnet.public.id
   iam_instance_profile = aws_iam_instance_profile.ec2.name
+  key_name             = "session-manager-test"
 
   tags = {
     Name = var.tag

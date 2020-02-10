@@ -47,9 +47,10 @@ resource "aws_route_table_association" "public" {
 }
 
 resource "aws_subnet" "private" {
+  for_each                = var.subnets
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, 64)
-  availability_zone       = "ap-northeast-1a"
+  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, each.value + 63)
+  availability_zone       = each.key
   map_public_ip_on_launch = false
 
   tags = {
