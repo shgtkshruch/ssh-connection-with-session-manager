@@ -10,8 +10,9 @@ docker-compose run terraform plan
 docker-compose run terraform apply
 ```
 
+## Settings
 
-## Install AWS CLI
+### Install AWS CLI
 
 ```sh
 curl "https://d1vvhvl2y92vvt.cloudfront.net/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
@@ -27,7 +28,7 @@ aws --version
 
 ref: [Installing the AWS CLI version 2 on MacOS - AWS Command Line Interface](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-mac.html)
 
-## Configure
+### Configure
 
 Configure iam user created by Terraform.  
 Access Key and Secret Access Key will be written to the terraform state file (`terraform.tfstate`), please protect your backend state file judiciously.
@@ -41,7 +42,7 @@ aws configure
 ref: [Configuring the AWS CLI - AWS Command Line Interface](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
 
 
-## Install Session Manager Plugin
+### Install Session Manager Plugin
 
 ```sh
 curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/mac/sessionmanager-bundle.zip" -o "sessionmanager-bundle.zip"
@@ -57,3 +58,18 @@ aws ssm start-session --target instance-id
 ```
 
 ref: [Start a Session - AWS Systems Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html)
+
+## Capistrano
+Deploy Rails applicaiton by capistrano throught Session Manager.  
+Add proxy command settiongs below.
+
+```
+require 'net/ssh/proxy/command'
+set :ssh_options,
+    keys: %w[YOURE_SSH_KEY],
+    forward_agent: true,
+    auth_methods: %w[publickey],
+    proxy: Net::SSH::Proxy::Command::new("aws ssm start-session --target #{ENV['INSTANCE_ID']} --document-name AWS-StartSSHSession --parameters 'portNumber=22'")
+ ```
+ 
+ ref: [Authentication & Authorisation - Capistrano](https://capistranorb.com/documentation/getting-started/authentication-and-authorisation/)
