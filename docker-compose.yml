@@ -6,7 +6,7 @@ services:
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci --innodb-large-prefix=true --innodb-file-format=Barracuda
     environment:
       MYSQL_ROOT_PASSWORD: pass0000
-      MYSQL_DATABASE: test_development
+      MYSQL_DATABASE: development
       MYSQL_USER: root
       MYSQL_PASSWORD: pass0000
     volumes:
