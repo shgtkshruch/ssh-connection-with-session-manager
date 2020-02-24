@@ -47,10 +47,12 @@ server "3.112.235.240", user: "ec2-user", roles: %w{app db web}
 #    auth_methods: %w(password)
 #  }
 
+require 'net/ssh/proxy/command'
 set :ssh_options,
     keys: %w[session-manager-test.pem],
     forward_agent: true,
-    auth_methods: %w[publickey]
+    auth_methods: %w[publickey],
+    proxy: Net::SSH::Proxy::Command::new("aws ssm start-session --target #{ENV['INSTANCE_ID']} --document-name AWS-StartSSHSession --parameters 'portNumber=22'")
 #
 # The server-based syntax can be used to override options:
 # ------------------------------------
