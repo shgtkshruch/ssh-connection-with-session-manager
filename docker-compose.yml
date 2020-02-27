@@ -29,6 +29,17 @@ services:
     depends_on:
       - db
 
+  sam:
+    build:
+      context: ./sam
+      dockerfile: Dockerfile
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./sam:/sam
+    env_file:
+      - ./sam/.env
+
   terraform: &terraform
     image: hashicorp/terraform:0.12.18
     volumes:
