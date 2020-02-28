@@ -42,3 +42,5 @@ yarn-debug.log*
 *.pem
 .env
 
+
+*.aws-sam

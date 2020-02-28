@@ -28,6 +28,8 @@ services:
       TZ: Asia/Tokyo
     depends_on:
       - db
+    env_file:
+      - .env
 
   sam:
     build:
@@ -46,7 +48,7 @@ services:
       - ./terraform:/terraform
     working_dir: /terraform
     env_file:
-      - .env
+      - ./terraform/.env
 
   tflint:
     <<: *terraform

@@ -12,37 +12,19 @@ Resources:
   SSMNotification:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: SSMNotification
+      CodeUri: s3://system-maneger-test/6563a47c07d0f167636cf43a478e4b8a
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
+      Environment:
+        Variables:
+          ENDPOINT: https://hooks.slack.com/services/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
       Events:
-        HelloWorld:
+        SSMEvent:
           Type: CloudWatchEvent
           Properties:
-            pattern:
+            Pattern:
               Fn::Sub: "{\n  \"source\": [\n    \"aws.ssm\"\n  ],\n  \"detail-type\"\
                 : [\n    \"AWS API Call via CloudTrail\"\n  ],\n  \"detail\": {\n\
                 \    \"eventSource\": [\n      \"ssm.amazonaws.com\"\n    ],\n   \
                 \ \"eventName\": [\n      \"StartSession\",\n      \"TerminateSession\"\
                 \n    ]\n  }\n}\n"
-      Environment:
-        Variables:
-          ENDPOINT:
-            Ref: https://hooks.slack.com/services/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
-Outputs:
-  HelloWorldApi:
-    Description: API Gateway endpoint URL for Prod stage for Hello World function
-    Value:
-      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/
-  HelloWorldFunction:
-    Description: Hello World Lambda Function ARN
-    Value:
-      Fn::GetAtt:
-      - HelloWorldFunction
-      - Arn
-  HelloWorldFunctionIamRole:
-    Description: Implicit IAM Role created for Hello World function
-    Value:
-      Fn::GetAtt:
-      - HelloWorldFunctionRole
-      - Arn

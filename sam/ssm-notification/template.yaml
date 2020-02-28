@@ -11,32 +11,35 @@ Globals:
     Timeout: 3
 
 Resources:
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+  SSMNotification:
+    Type: AWS::Serverless::Function
     Properties:
-      CodeUri: hello-world/
+      CodeUri: app/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
-      Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /hello
-            Method: get
       Environment:
         Variables:
-          ENDPOINT: !Ref https://hooks.slack.com/services/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
-
-Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+          ENDPOINT: https://hooks.slack.com/services/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
+      Events:
+        SSMEvent:
+          Type: CloudWatchEvent
+          Properties:
+            Pattern:
+              !Sub |
+              {
+                "source": [
+                  "aws.ssm"
+                ],
+                "detail-type": [
+                  "AWS API Call via CloudTrail"
+                ],
+                "detail": {
+                  "eventSource": [
+                    "ssm.amazonaws.com"
+                  ],
+                  "eventName": [
+                    "StartSession",
+                    "TerminateSession"
+                  ]
+                }
+              }
