@@ -37,3 +37,15 @@ set :repo_url, "git@github.com:shgtkshruch/ssh-connection-with-session-manager.g
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
+
+# Set ec2 instance id by instance name
+set :instance_id, -> {
+  run_locally do
+    instance_name = env.variables.fetch(:instance_name)
+    puts "instance_name: #{instance_name}"
+    capture :aws, 'ec2', 'describe-instances',
+      '--filters', "Name=tag:Name,Values=#{instance_name}",
+      '--query', 'Reservations[*].Instances[*].[InstanceId]',
+      '--output', 'text'
+  end
+}
