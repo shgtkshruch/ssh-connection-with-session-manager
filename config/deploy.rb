@@ -49,3 +49,11 @@ set :instance_id, -> {
       '--output', 'text'
   end
 }
+
+namespace :deploy do
+  task :mackerel do
+    on roles(:all) do |host|
+      upload! 'config/deploy/mackerel-agent.conf', '/etc/mackerel-agent/mackerel-agent.conf'
+    end
+  end
+end
