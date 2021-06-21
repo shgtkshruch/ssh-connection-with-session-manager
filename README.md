@@ -60,8 +60,8 @@ aws ssm start-session --target instance-id
 ref: [Start a Session - AWS Systems Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html)
 
 ## Capistrano
-Deploy Rails applicaiton by capistrano throught Session Manager.  
-Add proxy command settiongs below.
+Deploy Rails application by capistrano through Session Manager.  
+Add proxy command settings below.
 
 ```
 require 'net/ssh/proxy/command'
